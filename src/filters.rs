@@ -9,7 +9,10 @@ pub fn apply_filter(json_value: &Value, filter: &str) -> Result<Value, serde_jso
             let nodes = path.query(json_value).all();
             Ok(serde_json::to_value(nodes).unwrap())
         },
-        Err(e) => Err(serde_json::Error::custom(format!("Invalid JSON Path: {}", e)))
+        Err(e) =>  {
+            eprintln!("Error parsing JSONPath filter: {}", e);
+            Ok(serde_json::Value::Array(vec![]))
+        }
     }
 }
 
